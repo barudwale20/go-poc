@@ -63,11 +63,13 @@ func main() {
 	hh := handlers.NewHello(l)
 	hl := handlers.NewHealth(l)
 	gb := handlers.NewGoodbye(l)
+	ph := handlers.NewProducts(l)
 
 	sm := http.NewServeMux()
 	sm.Handle("/hello", hh)
 	sm.Handle("/health", hl)
 	sm.Handle("/bye", gb)
+	sm.Handle("/products", ph)
 
 	//HTTP Server Simple
 	// http.ListenAndServe(":8000", sm)
