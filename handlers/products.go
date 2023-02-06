@@ -19,6 +19,10 @@ func (h *Products) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 		h.getProducts(rw, req)
 		return
 	}
+	if req.Method == http.MethodPost {
+		h.addProduct(rw, req)
+		return
+	}
 
 	// catch all
 	rw.WriteHeader(http.StatusMethodNotAllowed)
@@ -33,4 +37,16 @@ func (h *Products) getProducts(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	// rw.Write(data)
+}
+
+func (h *Products) addProduct(rw http.ResponseWriter, req *http.Request) {
+	h.l.Println("Adding a product with POST request!")
+	prod := &data.Product{}
+	err := prod.FromJSON(req.Body)
+	if err != nil {
+		http.Error(rw, "Unable to unmarshal json!", http.StatusBadRequest)
+	}
+
+	h.l.Println("Product: %#v", prod)
+	data.AddProduct(prod)
 }
